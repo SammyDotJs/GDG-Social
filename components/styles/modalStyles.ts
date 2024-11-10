@@ -1,16 +1,16 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, FONT_SIZES, SPACING} from '../../constants';
+import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../../constants';
 import {rS} from '../../utils';
 
 export const modalStyles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.black,
     padding: rS(SPACING.h10),
-    borderRadius: 20,
+    borderRadius: 99,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    width: '50%',
+    width: '90%',
     opacity: 0.9,
     shadowColor: '#00000089',
     shadowOffset: {
@@ -30,5 +30,6 @@ export const modalStyles = StyleSheet.create({
     fontSize: rS(FONT_SIZES.h9),
     color: COLORS.white,
     textAlign: 'center',
+    fontFamily: FONT_FAMILY.m,
   },
 });

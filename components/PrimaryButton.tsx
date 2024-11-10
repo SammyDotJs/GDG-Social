@@ -1,13 +1,14 @@
-import {View, Text} from 'react-native';
+import {View, Text, StyleProp, TextStyle} from 'react-native';
 import React from 'react';
 import {Button} from '@rneui/base';
-import {COLORS, FONT_SIZES, SPACING} from '../constants';
+import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../constants';
 import {rS} from '../utils';
+import {ViewStyle} from 'react-native-size-matters';
 
 type ButtonProps = {
   title: string;
   buttonStyle?: any;
-  titleStyle?: any;
+  titleStyle?: StyleProp<TextStyle>;
   onPress: () => void;
 };
 
@@ -22,7 +23,7 @@ const PrimaryButton = ({
       title={title}
       buttonStyle={[
         {
-          width: '100%',
+          //   width: '100%',
           padding: rS(SPACING.h10),
           backgroundColor: COLORS.black,
           borderRadius: 99,
@@ -33,6 +34,7 @@ const PrimaryButton = ({
         {
           color: COLORS.white,
           fontSize: rS(FONT_SIZES.h8),
+          fontFamily: FONT_FAMILY.m,
         },
         titleStyle,
       ]}

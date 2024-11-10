@@ -19,17 +19,20 @@ const AppNavigation = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCurrentUser());
-  }, []);
+    dispatch(getCurrentUser() as any);
+  }, [dispatch]);
 
-  //   const use = auth().currentUser
-  //   console.log(use,"p")
+  const currentUser = auth().currentUser;
+  console.log(currentUser)
 
-  const onAuthStateChanged = (user: FirebaseAuthTypes.User) => {
+  const onAuthStateChanged = (
+    user: FirebaseAuthTypes.User | null | undefined,
+  ) => {
     console.log(user, 'uh');
-    // setUser(user);
+    setUser(user);
     if (initializing) setInitializing(false);
     if (user) {
+      dispatch(getCurrentUser() as any);
       setInitRoute('Tabs');
     } else {
       setInitRoute('Login');
@@ -38,9 +41,12 @@ const AppNavigation = () => {
 
   useEffect(() => {
     console.log('Testing');
+    console.log(user);
+    if (!currentUser) setInitializing(false);
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
     return subscriber; // unsubscribe on unmount
-  }, []);
+  }, [dispatch]);
 
   if (initializing) {
     return (

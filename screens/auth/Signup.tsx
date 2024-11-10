@@ -11,7 +11,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import InputField from '../../components/InputField';
 import PrimaryButton from '../../components/PrimaryButton';
-import {COLORS, FONT_SIZES, SPACING} from '../../constants';
+import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../../constants';
 import {rS} from '../../utils/responsize.size';
 import SafeArea from '../../utils/SafeArea';
 import {IPageProps} from '../../types/NavigationProps';
@@ -148,8 +148,8 @@ const Signup = ({navigation}: IPageProps) => {
             }}>
             <Text
               style={{
-                fontSize: rS(FONT_SIZES.h3),
-                fontWeight: '900',
+                fontSize: rS(FONT_SIZES.h4),
+                fontFamily: FONT_FAMILY.sb,
               }}>
               Create Account
             </Text>
@@ -215,7 +215,7 @@ const Signup = ({navigation}: IPageProps) => {
           </View>
           <PrimaryButton
             onPress={handleSignup}
-            title="Login"
+            title="Sign Up"
             buttonStyle={{
               marginTop: rS(SPACING.h7),
             }}

@@ -1,15 +1,30 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextStyle,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {rS} from '../utils';
-import {BORDER_RADIUS, COLORS, FONT_SIZES, SPACING} from '../constants';
+import {
+  BORDER_RADIUS,
+  COLORS,
+  FONT_FAMILY,
+  FONT_SIZES,
+  SPACING,
+} from '../constants';
 
 type TextInputProps = {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   secureTextEntry?: boolean;
   value: string;
   query: (text: string) => void;
   keyboardtype?: string;
+  textInputStyle?: StyleProp<TextStyle>;
+  isPostField?: boolean;
 };
 
 const InputField = ({
@@ -18,7 +33,9 @@ const InputField = ({
   secureTextEntry,
   value,
   query,
-  keyboardtype
+  keyboardtype,
+  textInputStyle,
+  isPostField,
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -33,7 +50,7 @@ const InputField = ({
         style={{
           fontSize: rS(FONT_SIZES.h9),
           color: isFocused ? COLORS.black : COLORS.lightgray,
-          fontWeight: '700',
+          fontFamily: FONT_FAMILY.m,
         }}>
         {label}
       </Text>
@@ -43,17 +60,24 @@ const InputField = ({
         placeholderTextColor={COLORS.placeholder}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        style={{
-          width: '100%',
-          borderRadius: rS(BORDER_RADIUS.b15),
-          backgroundColor: COLORS.lightgreen,
-          padding: rS(SPACING.h8),
-          fontSize: rS(FONT_SIZES.h10),
-          color: COLORS.black,
-          fontWeight: '600',
-          borderWidth: 2,
-          borderColor: isFocused ? COLORS.placeholder : COLORS.lightgreen,
-        }}
+        style={[
+          {
+            width: '100%',
+            borderRadius: rS(BORDER_RADIUS.b15),
+            backgroundColor: COLORS.lightgreen,
+            padding: rS(SPACING.h8),
+            fontSize: rS(FONT_SIZES.h10),
+            fontFamily: FONT_FAMILY.r,
+            color: COLORS.black,
+            borderWidth: 2,
+            borderColor: isFocused ? COLORS.placeholder : COLORS.lightgreen,
+          },
+          textInputStyle,
+          {
+            borderColor:
+              isFocused && isPostField ? COLORS.black : COLORS.normalgreen,
+          },
+        ]}
         secureTextEntry={secureTextEntry}
         value={value}
         onChangeText={text => query(text)}

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import SafeArea from '../../utils/SafeArea';
-import {COLORS, FONT_SIZES, SPACING} from '../../constants';
+import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../../constants';
 import {rS} from '../../utils';
 import InputField from '../../components/InputField';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -29,6 +29,7 @@ const Login = ({navigation}: IPageProps) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
+        navigation.navigate('Tabs');
         console.log('User account created & signed in!');
         console.log(user);
       })
@@ -63,7 +64,8 @@ const Login = ({navigation}: IPageProps) => {
             justifyContent: 'center',
           }}>
           <View style={{width: '100%', marginTop: rS(SPACING.h1)}}>
-            <Text style={{fontSize: rS(FONT_SIZES.h3), fontWeight: '900'}}>
+            <Text
+              style={{fontSize: rS(FONT_SIZES.h3), fontFamily: FONT_FAMILY.sb}}>
               Login
             </Text>
           </View>

@@ -3,7 +3,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from './Tabs/Home/HomeScreen';
 import AddPost from './Tabs/AddPost/AddPost';
 import ProfileScreen from './Tabs/Profile/ProfileScreen';
-import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../constants';
+import {
+  BORDER_RADIUS,
+  COLORS,
+  FONT_FAMILY,
+  FONT_SIZES,
+  SPACING,
+} from '../constants';
 import {rS} from '../utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -19,23 +25,25 @@ const TabNavigator = () => {
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
-          borderRadius: 99,
-          margin: rS(SPACING.h5),
-          backgroundColor: COLORS.black,
+            // borderRadius: 99,
+          //   margin: rS(SPACING.h5),
+          backgroundColor: COLORS.white,
           elevation: 0,
           borderWidth: 0,
           height: rS(60),
           paddingVertical: rS(SPACING.h6),
+          borderTopWidth: 0,
         },
         tabBarLabelStyle: {
           fontSize: rS(FONT_SIZES.h9),
           fontFamily: FONT_FAMILY.r,
           fontWeight: 300,
-          color: COLORS.lightgreen,
+          color: COLORS.black,
         },
         tabBarItemStyle: {
-          paddingVertical: rS(SPACING.h13),
+        //   paddingVertical: rS(SPACING.h13),
         },
+        tabBarHideOnKeyboard: true,
         tabBarLabel: ({focused, children}) => {
           return (
             <Text
@@ -43,12 +51,13 @@ const TabNavigator = () => {
                 fontSize: rS(FONT_SIZES.h9),
                 fontFamily: FONT_FAMILY.r,
                 fontWeight: 300,
-                color: focused ? COLORS.normalgreen : COLORS.lightgreen,
+                color: focused ? COLORS.normalgreen : COLORS.black,
               }}>
               {children}
             </Text>
           );
         },
+
       }}>
       <Tab.Screen
         name="Home"
@@ -59,7 +68,7 @@ const TabNavigator = () => {
               <AntDesign
                 name="home"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.lightgreen}
+                color={focused ? COLORS.normalgreen : COLORS.black}
               />
             );
           },
@@ -74,7 +83,7 @@ const TabNavigator = () => {
               <MaterialIcons
                 name="post-add"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.lightgreen}
+                color={focused ? COLORS.normalgreen : COLORS.black}
               />
             );
           },
@@ -89,7 +98,7 @@ const TabNavigator = () => {
               <Feather
                 name="user"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.lightgreen}
+                color={focused ? COLORS.normalgreen : COLORS.black}
               />
             );
           },

@@ -1,5 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import currentUserSliceReducer from './currentUserInfo';
+import {useDispatch} from 'react-redux';
 
 export const store = configureStore({
   reducer: {
@@ -11,3 +12,7 @@ export const store = configureStore({
       immutableCheck: false,
     }),
 });
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export const useAppDispatch: () => AppDispatch = useDispatch;
