@@ -7,6 +7,7 @@ type RootStackParamList = {
   Login: undefined;
   Tabs: undefined;
   PostDetails: PostsType;
+  DetailsScreen: {};
 };
 
 export interface IPageProps {

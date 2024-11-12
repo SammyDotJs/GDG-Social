@@ -20,7 +20,6 @@ import {rS} from '../../../../utils';
 import PrimaryButton from '../../../../components/PrimaryButton';
 import {styles} from '../../Profile/styles/profileScreenStyles';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCurrentUser} from '../../../../redux/currentUserInfo';
 import {ActivityIndicator} from 'react-native';

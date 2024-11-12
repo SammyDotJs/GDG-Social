@@ -16,12 +16,13 @@ import {
 } from '../../../constants';
 import {rS} from '../../../utils';
 import InputField from '../../../components/InputField';
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 import {User} from '../../../types/UserTypes';
+import {PostsType} from '../Home/HomeScreen';
+import { IPageProps } from '../../../types/NavigationProps';
 
-const SearchScreen: React.FC<BottomTabBarProps> = ({navigation}) => {
+const SearchScreen: React.FC<IPageProps> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,6 @@ const SearchScreen: React.FC<BottomTabBarProps> = ({navigation}) => {
   const currentUser = useSelector((state: any) => state.currentUser);
 
   const goToDetailsScreen = (userData: User) => {
-    console.log(userData);
     navigation.navigate('DetailsScreen', userData);
   };
 
@@ -68,7 +68,7 @@ const SearchScreen: React.FC<BottomTabBarProps> = ({navigation}) => {
   }, [searchQuery]);
   console.log(currentUser.userid, searchResults);
 
-  const renderSearchResults = ({item}) => {
+  const renderSearchResults = ({item}: {item: PostsType}) => {
     return (
       <TouchableOpacity
         onPress={() => goToDetailsScreen(item)}

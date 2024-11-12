@@ -20,7 +20,11 @@ export type PostsType = {
   author: string;
   content: string;
   createdAt: any;
+  timestamp: any;
   username: string;
+  fullName?: string;
+  email: string;
+  date?: Date;
 };
 
 const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
@@ -38,9 +42,9 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
   }, [dispatch]);
 
   const userId = currentUser?.userid;
-  console.log(userId)
+  console.log(userId);
   const fetchFollowedUsers = async (): Promise<string[]> => {
-    setPostsLoading(true)
+    setPostsLoading(true);
     if (!userId) return [];
 
     try {
@@ -108,7 +112,6 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
       }}
       isNewsFeed
       onPress={() => navigation.navigate('PostDetails', item)}
-
     />
   );
 
@@ -118,7 +121,6 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
         style={{
           paddingHorizontal: rS(SPACING.h7),
           flexGrow: 1,
-          //   paddingTop: rS(SPACING.h1),
         }}>
         <View style={{width: '100%'}}>
           <Text

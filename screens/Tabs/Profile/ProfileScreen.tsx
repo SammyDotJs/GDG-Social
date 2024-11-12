@@ -25,6 +25,7 @@ import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import {getCurrentUser} from '../../../redux/currentUserInfo';
 import PostComponent from '../../../components/PostComponent';
+import {PostsType} from '../Home/HomeScreen';
 
 type PostataProps = {
   id: string;
@@ -33,18 +34,19 @@ type PostataProps = {
 };
 
 const ProfileScreen = ({navigation}: BottomTabBarProps) => {
-  const currentUser = useSelector(state => state.currentUser);
+  const currentUser = useSelector((state: any) => state.currentUser);
+  const username = useSelector((state: any) => state.currentUser.username);
   const fullName = useSelector((state: any) => state.currentUser.fullName);
-  const email = useSelector(state => state.currentUser.email);
+  const email = useSelector((state: any) => state.currentUser.email);
   const profileLetter = fullName?.charAt(0).toUpperCase();
-  const following = useSelector(state => state.currentUser.following);
-  const followers = useSelector(state => state.currentUser.followers);
+  const following = useSelector((state: any) => state.currentUser.following);
+  const followers = useSelector((state: any) => state.currentUser.followers);
 
   const [isFetching, setIsFetching] = useState(false);
 
   console.log(currentUser);
 
-  const [userPosts, setUserPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState<PostsType[]>([]);
   const [refreshing, setRefreshing] = useState();
 
   const handleLogOut = () => {
@@ -58,6 +60,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
       const posts: any[] = [];
       const snapshot = await firestore()
         .collection('posts')
+        .where('username', '==', username)
         .orderBy('createdAt', 'desc')
         .get();
       snapshot.forEach(doc => {
@@ -94,9 +97,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
     // setUserPosts;
   }, []);
 
-  const renderPosts = ({item}) => {
-    // console.log(item);
-
+  const renderPosts = ({item}: {item: PostsType}) => {
     return (
       <PostComponent
         id={item.id}

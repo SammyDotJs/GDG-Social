@@ -14,10 +14,8 @@ const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => {
   const currentUser = auth().currentUser;
-  console.log(currentUser)
 
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
   const [initRoute, setInitRoute] = useState('Signup');
 
   const dispatch = useDispatch();
@@ -29,7 +27,6 @@ const AppNavigation = () => {
     user: FirebaseAuthTypes.User | null | undefined,
   ) => {
     // console.log(user, 'uh');
-    setUser(user);
     if (initializing) setInitializing(false);
     if (user) {
       dispatch(getCurrentUser() as any);

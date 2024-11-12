@@ -21,9 +21,9 @@ const AddPost = () => {
   const [newPost, setNewPost] = useState('');
   const [isCreatePostSuccessful, setIsCreatePostSuccessful] = useState(false);
   const [isCreatePostFailed, setIsCreatePostFailed] = useState(false);
-  const author = useSelector(state => state.currentUser.fullName);
-  const username = useSelector(state => state.currentUser.username);
-  console.log(username,"username");
+  const author = useSelector((state: any) => state.currentUser.fullName);
+  const username = useSelector((state: any) => state.currentUser.username);
+  console.log(username, 'username');
 
   const createPost = async (content: string, author: string) => {
     try {

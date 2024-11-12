@@ -32,14 +32,6 @@ import PostAlertModal from '../../components/PostAlertModal';
 import {useDispatch} from 'react-redux';
 import {getCurrentUser} from '../../redux/currentUserInfo';
 
-const inputErrorStyles = {
-  textAlign: 'left',
-  width: wp(90),
-  color: COLORS.error,
-  paddingTop: rS(SPACING.h13),
-  fontSize: rS(FONT_SIZES.h9),
-};
-
 const Signup = ({navigation}: IPageProps) => {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
@@ -165,7 +157,7 @@ const Signup = ({navigation}: IPageProps) => {
           console.error(error);
         })
         .finally(() => {
-          dispatch(getCurrentUser());
+          dispatch(getCurrentUser() as any);
           setIsLoading(false);
           setUsername('');
           setFullName('');
@@ -228,7 +220,14 @@ const Signup = ({navigation}: IPageProps) => {
                 query={text => setUsername(text)}
                 value={username}
               />
-              <Text style={inputErrorStyles}></Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  width: wp(90),
+                  color: COLORS.error,
+                  paddingTop: rS(SPACING.h13),
+                  fontSize: rS(FONT_SIZES.h9),
+                }}></Text>
             </View>
             <View
               style={{
@@ -240,7 +239,14 @@ const Signup = ({navigation}: IPageProps) => {
                 query={text => setFullName(text)}
                 value={fullName}
               />
-              <Text style={inputErrorStyles}></Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  width: wp(90),
+                  color: COLORS.error,
+                  paddingTop: rS(SPACING.h13),
+                  fontSize: rS(FONT_SIZES.h9),
+                }}></Text>
             </View>
             <View
               style={{
@@ -252,7 +258,16 @@ const Signup = ({navigation}: IPageProps) => {
                 query={text => setEmail(text)}
                 value={email}
               />
-              <Text style={inputErrorStyles}>{emailError}</Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  width: wp(90),
+                  color: COLORS.error,
+                  paddingTop: rS(SPACING.h13),
+                  fontSize: rS(FONT_SIZES.h9),
+                }}>
+                {emailError}
+              </Text>
             </View>
             <View
               style={{
@@ -265,7 +280,16 @@ const Signup = ({navigation}: IPageProps) => {
                 value={password}
                 secureTextEntry={true}
               />
-              <Text style={inputErrorStyles}>{passwordError}</Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  width: wp(90),
+                  color: COLORS.error,
+                  paddingTop: rS(SPACING.h13),
+                  fontSize: rS(FONT_SIZES.h9),
+                }}>
+                {passwordError}
+              </Text>
             </View>
             <View
               style={{
@@ -278,7 +302,16 @@ const Signup = ({navigation}: IPageProps) => {
                 value={cpassword}
                 secureTextEntry={true}
               />
-              <Text style={inputErrorStyles}>{cPasswordError}</Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  width: wp(90),
+                  color: COLORS.error,
+                  paddingTop: rS(SPACING.h13),
+                  fontSize: rS(FONT_SIZES.h9),
+                }}>
+                {cPasswordError}
+              </Text>
             </View>
           </View>
           <PrimaryButton
