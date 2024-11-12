@@ -12,7 +12,7 @@ const App = () => {
       <NavigationContainer>
         <AppNavigation />
       </NavigationContainer>
-      <StatusBar barStyle={'light-content'} backgroundColor={COLORS.bgColor} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={COLORS.bgColor} />
     </Provider>
   );
 };

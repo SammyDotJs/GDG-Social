@@ -1,9 +1,14 @@
-import {StatusBar} from 'react-native';
+import {StatusBar, StyleProp, ViewStyle} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { COLORS } from '../constants';
+import {COLORS} from '../constants';
 
-const SafeArea = ({children, style}: any) => {
+type SafeAreaTypes = {
+  children: any;
+  style?: StyleProp<ViewStyle>;
+};
+
+const SafeArea = ({children, style}: SafeAreaTypes) => {
   return (
     <SafeAreaView
       style={[

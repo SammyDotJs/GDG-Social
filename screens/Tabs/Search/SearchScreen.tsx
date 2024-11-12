@@ -67,13 +67,13 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
         style={{
           paddingVertical: rS(SPACING.h9),
           borderBottomWidth: searchQuery.length == 1 ? 0 : 2,
-          borderColor: COLORS.lightgreen,
+          borderColor: COLORS.lightBlue1 + 19,
         }}>
         <Text
           style={{
             fontFamily: FONT_FAMILY.m,
             fontSize: rS(FONT_SIZES.h9),
-            color: COLORS.white,
+            color: COLORS.black,
           }}>
           {item.fullName}
         </Text>
@@ -81,7 +81,7 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
           style={{
             fontFamily: FONT_FAMILY.ri,
             fontSize: rS(FONT_SIZES.h9),
-            color: COLORS.placeholder,
+            color: COLORS.lightBlue1,
           }}>{`@${item.username}`}</Text>
       </TouchableOpacity>
     );
@@ -91,6 +91,7 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
     <SafeArea
       style={{
         paddingHorizontal: rS(SPACING.h7),
+        paddingTop: rS(SPACING.h5),
       }}>
       <View
         style={{
@@ -112,21 +113,6 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
             width: '100%',
           }}
         />
-        {/* <Button
-          onPress={handleSearch}
-          title={
-            <Feather
-              name="search"
-              size={rS(FONT_SIZES.h5)}
-              color={COLORS.white}
-            />
-          }
-          buttonStyle={{
-            padding: rS(SPACING.h10),
-            backgroundColor: COLORS.deepTeal,
-            borderRadius: 99,
-          }}
-        /> */}
       </View>
       {searchQuery.length > 0 && searchResults.length === 0 ? (
         <View
@@ -152,10 +138,11 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
           renderItem={renderSearchResults}
           contentContainerStyle={{
             marginTop: rS(SPACING.h6),
-            backgroundColor: COLORS.lightgreen + 19,
+            backgroundColor: COLORS.lightBlue1 + 39,
             borderRadius: BORDER_RADIUS.b15,
             paddingHorizontal: rS(SPACING.h8),
           }}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </SafeArea>

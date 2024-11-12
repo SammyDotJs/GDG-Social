@@ -22,11 +22,13 @@ const AddPost = () => {
   const [isCreatePostSuccessful, setIsCreatePostSuccessful] = useState(false);
   const [isCreatePostFailed, setIsCreatePostFailed] = useState(false);
   const author = useSelector(state => state.currentUser.fullName);
+  const username = useSelector(state => state.currentUser.username);
+  console.log(username,"username");
 
   const createPost = async (content: string, author: string) => {
     try {
       await firestore().collection('posts').add({
-        // title,
+        username,
         content,
         author,
         createdAt: firestore.FieldValue.serverTimestamp(),
@@ -86,7 +88,7 @@ const AddPost = () => {
               style={{
                 fontSize: rS(FONT_SIZES.h6),
                 fontFamily: FONT_FAMILY.sb,
-                color: COLORS.lightgreen,
+                color: COLORS.purpleBlue1,
               }}>
               Create a post
             </Text>
@@ -99,9 +101,6 @@ const AddPost = () => {
               textInputStyle={{
                 backgroundColor: COLORS.searchField,
                 borderWidth: 0,
-                // borderBottomWidth: 2,
-                // borderColor: COLORS.normalgreen,
-                // borderRadius: 0,
                 paddingBottom: rS(SPACING.h13),
                 paddingHorizontal: rS(SPACING.h11),
               }}
@@ -118,10 +117,10 @@ const AddPost = () => {
                   width: rS(100),
                   padding: rS(SPACING.h13),
                   marginLeft: 'auto',
-                  backgroundColor: COLORS.lightgreen,
+                  backgroundColor: COLORS.black,
                 }}
                 titleStyle={{
-                  color: COLORS.black,
+                  color: COLORS.white,
                 }}
               />
             </View>

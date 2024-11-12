@@ -60,7 +60,7 @@ const InputField = ({
         <Text
           style={{
             fontSize: rS(FONT_SIZES.h9),
-            color: isFocused ? COLORS.lightgreen : COLORS.lightgray,
+            color: isFocused ? COLORS.purpleBlue1 : COLORS.lightBlue1,
             fontFamily: FONT_FAMILY.m,
           }}>
           {label}
@@ -77,11 +77,11 @@ const InputField = ({
             width: '100%',
             borderRadius: rS(BORDER_RADIUS.b15),
             backgroundColor: COLORS.searchField,
-            padding: rS(SPACING.h10),
+            padding: rS(SPACING.h9),
             fontSize: rS(FONT_SIZES.h10),
             fontFamily: FONT_FAMILY.r,
-            color: COLORS.white,
-            borderWidth: 2,
+            color: COLORS.black,
+            // borderWidth: 2,
           },
           textInputStyle,
         //   {

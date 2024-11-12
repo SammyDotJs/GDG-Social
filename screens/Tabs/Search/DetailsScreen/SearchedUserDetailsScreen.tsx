@@ -64,17 +64,18 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
         id: doc.id,
         ...doc.data(),
       }));
-      const checkIfFollowing = followersList.forEach(user => {
-        console.log(user.id, currentUserId, 'CHECK FOLLOWING');
-        if (user.id === currentUserId) {
-          setIsFollowing(true);
-        } else {
-          setIsFollowing(false);
-        }
-      });
+      const checkIfFollowing = followersList.filter(
+        user => user.id === currentUserId,
+      );
+      console.log(checkIfFollowing.length, 'CIF');
+      if (checkIfFollowing.length === 1) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
+      //   setIsFollowing(checkIfFollowing);
       setFollowers(followersList.length);
       setFollowing(followingList.length);
-      // console.log(followersList.length, followingList.length, 'CURES');
       console.log(followersList);
     } catch (error) {
       console.error(error);
@@ -85,7 +86,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
   useEffect(() => {
     loadSearchedUser();
   }, []);
-  console.log(isFollowing)
+  console.log(isFollowing);
   const followUser = async () => {
     try {
       // Add target user to the following list of the current user
@@ -159,11 +160,12 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
+          paddingTop: rS(SPACING.h5),
         }}>
         <View
           style={{
             alignItems: 'center',
-            backgroundColor: COLORS.deepTeal + 90,
+            backgroundColor: COLORS.purpleBlue1,
             width: '90%',
             padding: rS(SPACING.h8),
             borderRadius: BORDER_RADIUS.b30,
@@ -188,7 +190,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
               style={{
                 fontSize: rS(FONT_SIZES.h8),
                 fontFamily: FONT_FAMILY.m,
-                color: COLORS.normalgreen,
+                color: COLORS.lightBlue1,
               }}>
               {fullName}
             </Text>
@@ -215,7 +217,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
                 style={{
                   fontFamily: FONT_FAMILY.m,
                   fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
+                  color: COLORS.white,
                 }}>
                 Followers
               </Text>
@@ -234,7 +236,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
                 style={{
                   fontFamily: FONT_FAMILY.m,
                   fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
+                  color: COLORS.white,
                 }}>
                 Following
               </Text>
@@ -253,7 +255,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
                 style={{
                   fontFamily: FONT_FAMILY.m,
                   fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
+                  color: COLORS.white,
                 }}>
                 Posts
               </Text>
@@ -270,8 +272,8 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
                 paddingVertical: rS(SPACING.h13),
                 width: '100%',
                 backgroundColor: isFollowing
-                  ? COLORS.darkTeal
-                  : COLORS.lightgreen,
+                  ? COLORS.lightBlue1
+                  : COLORS.white,
               }}
               titleStyle={{
                 color: isFollowing ? COLORS.white : COLORS.black,

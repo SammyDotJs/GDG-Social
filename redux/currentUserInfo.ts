@@ -11,6 +11,7 @@ interface AsyncThunkConfig {
 }
 
 const initialState = {
+  username: '',
   fullName: '',
   email: '',
   userid: {},
@@ -21,6 +22,7 @@ const initialState = {
 
 export const getCurrentUser = createAsyncThunk<
   {
+    username: string | null | undefined;
     fullName: string | null | undefined;
     email: string | null | undefined;
     userid: any | null | undefined;
@@ -64,8 +66,8 @@ export const getCurrentUser = createAsyncThunk<
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(followersList.length, 'CURES');
     return {
+      username: userid[0]?.username,
       fullName: user?.displayName,
       email: user?.email,
       userid: userid[0]?.id,
@@ -84,14 +86,15 @@ const currentUserSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
+        state.fullName = action.payload.fullName ?? '';
+        state.username = action.payload.username ?? '';
+        state.email = action.payload.email ?? '';
         state.userid = action.payload.userid;
         state.followers = action.payload.followers;
         state.following = action.payload.following;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action.payload as null;
       });
   },
 });

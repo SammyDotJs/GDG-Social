@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   },
   profileText: {
     fontSize: rS(FONT_SIZES.h5),
-    color: COLORS.normalgreen,
+    color: COLORS.lightBlue1,
     fontFamily: FONT_FAMILY.eb,
   },
 });

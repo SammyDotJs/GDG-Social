@@ -43,9 +43,6 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const dispatch = useDispatch();
-  //   useEffect(() => {
-  //     dispatch(getCurrentUser());
-  //   }, [dispatch]);
   console.log(currentUser);
 
   const [userPosts, setUserPosts] = useState([]);
@@ -114,183 +111,209 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
         author={item.author}
         content={item.content}
         date={item.timestamp}
+        username={item.username}
       />
     );
   };
 
   return (
     <SafeArea>
-      {/* Log out */}
-      <TouchableOpacity
-        onPress={handleLogOut}
-        style={{
-          alignItems: 'center',
-          marginLeft: 'auto',
-          marginRight: rS(SPACING.h5),
-        }}>
-        <Feather name="log-out" size={rS(FONT_SIZES.h5)} color={COLORS.error} />
-      </TouchableOpacity>
-      {/* <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: rS(SPACING.h7),
-          flexGrow: 1,
-        }}> */}
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'center',
-          marginTop: rS(SPACING.h5),
-          paddingBottom: rS(400),
-        }}>
-        <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: COLORS.deepTeal,
-            width: '90%',
-            padding: rS(SPACING.h8),
-            borderRadius: BORDER_RADIUS.b30,
-          }}>
-          <View style={styles.profileImage}>
-            <Text style={styles.profileText}>{profileLetter}</Text>
-          </View>
-          <View
+      <View>
+        {isFetching ? (
+          <ActivityIndicator
+            color={COLORS.placeholder}
             style={{
-              alignItems: 'center',
-              marginVertical: rS(SPACING.h5),
-            }}>
-            <Text
-              style={{
-                fontSize: rS(FONT_SIZES.h8),
-                fontFamily: FONT_FAMILY.m,
-                color: COLORS.white,
-              }}>
-              {fullName}
-            </Text>
-            <Text
-              style={{
-                fontSize: rS(FONT_SIZES.h8),
-                fontFamily: FONT_FAMILY.m,
-                color: COLORS.normalgreen,
-              }}>
-              {email}
-            </Text>
-          </View>
-          {/* User action */}
+              margin: 'auto',
+            }}
+            size={rS(FONT_SIZES.h3)}
+          />
+        ) : (
           <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: rS(SPACING.h5),
-              marginVertical: rS(SPACING.h8),
-            }}>
-            {/* followers */}
-            <View
-              style={
-                {
-                  // alignItems:"center"
-                }
-              }>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                {followers}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
-                }}>
-                Followers
-              </Text>
-            </View>
-            {/* following */}
-            <View
-              style={
-                {
-                  // alignItems:"center"
-                }
-              }>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                {following}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
-                }}>
-                Following
-              </Text>
-            </View>
-            {/* posts */}
-            <View
-              style={
-                {
-                  // alignItems:"center"
-                }
-              }>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                0
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.placeholder,
-                }}>
-                Posts
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: rS(SPACING.h5),
-          }}>
-          {isFetching ? (
-            <ActivityIndicator
-              color={COLORS.placeholder}
-              style={{
-                margin: 'auto',
+            style={
+              {
+                //   paddingBottom: rS(200),
+              }
+            }>
+            <FlatList
+              data={userPosts}
+              renderItem={renderPosts}
+              contentContainerStyle={{
+                paddingBottom: rS(100),
               }}
-              size={rS(FONT_SIZES.h3)}
+              ListHeaderComponent={() => (
+                <>
+                  {/* Log out */}
+                  <TouchableOpacity
+                    onPress={handleLogOut}
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: rS(SPACING.h9),
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: rS(FONT_SIZES.h8),
+                        fontFamily: FONT_FAMILY.m,
+                        color: COLORS.error,
+                      }}>
+                      Log out
+                    </Text>
+                    <Feather
+                      name="log-out"
+                      size={rS(FONT_SIZES.h5)}
+                      color={COLORS.error}
+                    />
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      width: '100%',
+                      alignItems: 'center',
+                      marginTop: rS(SPACING.h5),
+                      // paddingBottom: rS(SPACING.h5),
+                    }}>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        backgroundColor: COLORS.purpleBlue1,
+                        width: '90%',
+                        padding: rS(SPACING.h8),
+                        borderRadius: BORDER_RADIUS.b30,
+                      }}>
+                      <View style={styles.profileImage}>
+                        <Text style={styles.profileText}>{profileLetter}</Text>
+                      </View>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          marginVertical: rS(SPACING.h5),
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: rS(FONT_SIZES.h8),
+                            fontFamily: FONT_FAMILY.m,
+                            color: COLORS.white,
+                          }}>
+                          {fullName}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: rS(FONT_SIZES.h8),
+                            fontFamily: FONT_FAMILY.m,
+                            color: COLORS.lightBlue1,
+                          }}>
+                          {email}
+                        </Text>
+                      </View>
+                      {/* User action */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: rS(SPACING.h5),
+                          marginVertical: rS(SPACING.h8),
+                        }}>
+                        {/* followers */}
+                        <View
+                          style={
+                            {
+                              // alignItems:"center"
+                            }
+                          }>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.b,
+                              fontSize: rS(FONT_SIZES.h6),
+                              color: COLORS.lightgreen,
+                            }}>
+                            {followers}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.m,
+                              fontSize: rS(FONT_SIZES.h8),
+                              color: COLORS.white,
+                            }}>
+                            Followers
+                          </Text>
+                        </View>
+                        {/* following */}
+                        <View
+                          style={
+                            {
+                              // alignItems:"center"
+                            }
+                          }>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.b,
+                              fontSize: rS(FONT_SIZES.h6),
+                              color: COLORS.lightgreen,
+                            }}>
+                            {following}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.m,
+                              fontSize: rS(FONT_SIZES.h8),
+                              color: COLORS.white,
+                            }}>
+                            Following
+                          </Text>
+                        </View>
+                        {/* posts */}
+                        <View
+                          style={
+                            {
+                              // alignItems:"center"
+                            }
+                          }>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.b,
+                              fontSize: rS(FONT_SIZES.h6),
+                              color: COLORS.lightgreen,
+                            }}>
+                            0
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: FONT_FAMILY.m,
+                              fontSize: rS(FONT_SIZES.h8),
+                              color: COLORS.white,
+                            }}>
+                            Posts
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        marginVertical: rS(SPACING.h8),
+                        alignItems: 'flex-start',
+                        width: '90%',
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: FONT_FAMILY.m,
+                          fontSize: rS(FONT_SIZES.h8),
+                          color: COLORS.white,
+                        }}>
+                        Posts
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              )}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              showsVerticalScrollIndicator={false}
             />
-          ) : (
-            <View
-              style={{
-                paddingBottom: rS(200),
-              }}>
-              <FlatList
-                data={userPosts}
-                renderItem={renderPosts}
-                contentContainerStyle={{
-                  paddingBottom: rS(100),
-                }}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-              />
-            </View>
-          )}
-        </View>
+          </View>
+        )}
       </View>
+      {/* </View> */}
       {/* </ScrollView> */}
     </SafeArea>
   );

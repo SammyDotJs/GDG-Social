@@ -52,7 +52,7 @@ const TabNavigator = () => {
               style={{
                 fontSize: rS(FONT_SIZES.h9),
                 fontFamily: FONT_FAMILY.r,
-                color: focused ? COLORS.normalgreen : COLORS.white,
+                color: focused ? COLORS.purpleBlue1 : COLORS.lightBlue1,
               }}>
               {children}
             </Text>
@@ -68,7 +68,7 @@ const TabNavigator = () => {
               <AntDesign
                 name="home"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.white}
+                color={focused ? COLORS.purpleBlue1 : COLORS.lightBlue1}
               />
             );
           },
@@ -83,7 +83,7 @@ const TabNavigator = () => {
               <Feather
                 name="search"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.white}
+                color={focused ? COLORS.purpleBlue1 : COLORS.lightBlue1}
               />
             );
           },
@@ -98,7 +98,7 @@ const TabNavigator = () => {
               <MaterialIcons
                 name="post-add"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.white}
+                color={focused ? COLORS.purpleBlue1 : COLORS.lightBlue1}
               />
             );
           },
@@ -113,7 +113,7 @@ const TabNavigator = () => {
               <Feather
                 name="user"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.white}
+                color={focused ? COLORS.purpleBlue1 : COLORS.lightBlue1}
               />
             );
           },
