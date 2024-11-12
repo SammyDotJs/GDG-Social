@@ -42,18 +42,10 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const dispatch = useDispatch();
   console.log(currentUser);
 
   const [userPosts, setUserPosts] = useState([]);
   const [refreshing, setRefreshing] = useState();
-
-  const testData = {
-    author: 'John Doe',
-    content: 'yooo',
-    createdAt: {nanoseconds: 104000000, seconds: 1731247491},
-    id: 'Q8y3H4EgxseO7rw1SRDs',
-  };
 
   const handleLogOut = () => {
     auth().signOut();
@@ -290,14 +282,14 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                     <View
                       style={{
                         marginVertical: rS(SPACING.h8),
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                         width: '90%',
                       }}>
                       <Text
                         style={{
                           fontFamily: FONT_FAMILY.m,
                           fontSize: rS(FONT_SIZES.h8),
-                          color: COLORS.white,
+                          color: COLORS.black,
                         }}>
                         Posts
                       </Text>

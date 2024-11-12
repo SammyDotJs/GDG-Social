@@ -73,7 +73,7 @@ const Login = ({navigation}: IPageProps) => {
               style={{
                 fontSize: rS(FONT_SIZES.h3),
                 fontFamily: FONT_FAMILY.sb,
-                color: COLORS.lightgreen,
+                color: COLORS.purpleBlue1,
               }}>
               Login
             </Text>
@@ -115,7 +115,7 @@ const Login = ({navigation}: IPageProps) => {
                 style={{
                   fontSize: rS(FONT_SIZES.h9),
                   fontFamily: FONT_FAMILY.r,
-                  color: COLORS.white,
+                  color: COLORS.lightBlue1,
                 }}>
                 Don't have an account?{' '}
               </Text>
@@ -124,7 +124,7 @@ const Login = ({navigation}: IPageProps) => {
                   style={{
                     fontSize: rS(FONT_SIZES.h9),
                     fontFamily: FONT_FAMILY.r,
-                    color: COLORS.normalgreen,
+                    color: COLORS.purpleBlue1,
                   }}>
                   Sign up
                 </Text>

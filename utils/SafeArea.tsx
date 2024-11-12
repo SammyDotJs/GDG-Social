@@ -8,7 +8,7 @@ type SafeAreaTypes = {
   style?: StyleProp<ViewStyle>;
 };
 
-const SafeArea = ({children, style}: SafeAreaTypes) => {
+const SafeArea: React.FC<SafeAreaTypes> = ({children, style}) => {
   return (
     <SafeAreaView
       style={[

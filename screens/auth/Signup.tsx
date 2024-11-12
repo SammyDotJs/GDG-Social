@@ -205,7 +205,7 @@ const Signup = ({navigation}: IPageProps) => {
               style={{
                 fontSize: rS(FONT_SIZES.h4),
                 fontFamily: FONT_FAMILY.sb,
-                color: COLORS.lightgreen,
+                color: COLORS.purpleBlue1,
               }}>
               Create Account
             </Text>
@@ -302,7 +302,7 @@ const Signup = ({navigation}: IPageProps) => {
                 style={{
                   fontSize: rS(FONT_SIZES.h9),
                   fontFamily: FONT_FAMILY.r,
-                  color: COLORS.white,
+                  color: COLORS.lightBlue1,
                 }}>
                 Already have an account?{' '}
               </Text>
@@ -311,7 +311,7 @@ const Signup = ({navigation}: IPageProps) => {
                   style={{
                     fontSize: rS(FONT_SIZES.h9),
                     fontFamily: FONT_FAMILY.r,
-                    color: COLORS.normalgreen,
+                    color: COLORS.purpleBlue1,
                   }}>
                   Log In
                 </Text>

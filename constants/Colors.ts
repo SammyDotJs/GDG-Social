@@ -18,5 +18,6 @@ export const COLORS = {
   lightBrown: '#D8D2C2',
   brownGray: '#4A4947',
   lightBlue1: '#7AB2D3',
-  purpleBlue1: '#4A628A',
+  lightgray1: '#EBF4F6',
+  purpleBlue1: '#092635',
 };

@@ -1,4 +1,10 @@
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import SafeArea from '../../../utils/SafeArea';
 import {
@@ -12,26 +18,26 @@ import {rS} from '../../../utils';
 import InputField from '../../../components/InputField';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-
-import {Button} from '@rneui/themed';
-import Feather from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
+import {User} from '../../../types/UserTypes';
 
-const SearchScreen = ({navigation}: BottomTabBarProps) => {
+const SearchScreen: React.FC<BottomTabBarProps> = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const currentUser = useSelector(state => state.currentUser);
+  const currentUser = useSelector((state: any) => state.currentUser);
 
-  const goToDetailsScreen = userData => {
+  const goToDetailsScreen = (userData: User) => {
     console.log(userData);
     navigation.navigate('DetailsScreen', userData);
   };
 
   const handleSearch = async () => {
+    setIsLoading(true);
     if (searchQuery.trim() === '') {
       setSearchResults([]);
+      setIsLoading(false);
       return;
     }
 
@@ -53,6 +59,8 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
       setSearchResults(filteredUsers);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -114,7 +122,15 @@ const SearchScreen = ({navigation}: BottomTabBarProps) => {
           }}
         />
       </View>
-      {searchQuery.length > 0 && searchResults.length === 0 ? (
+      {isLoading ? (
+        <ActivityIndicator
+          color={COLORS.placeholder}
+          style={{
+            margin: 'auto',
+          }}
+          size={rS(FONT_SIZES.h3)}
+        />
+      ) : searchQuery.length > 0 && searchResults.length === 0 ? (
         <View
           style={{
             width: '100%',

@@ -15,7 +15,7 @@ import {getCurrentUser} from '../../../redux/currentUserInfo';
 import firestore from '@react-native-firebase/firestore';
 import PostComponent from '../../../components/PostComponent';
 
-type PostsType = {
+export type PostsType = {
   id: string;
   author: string;
   content: string;
@@ -23,12 +23,11 @@ type PostsType = {
   username: string;
 };
 
-const HomeScreen = ({navigation}: IPageProps) => {
+const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
   const [postsLoading, setPostsLoading] = useState(true);
   const [posts, setPosts] = useState<PostsType[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fullName = useSelector((state: any) => state.currentUser.fullName);
   const currentUser = useSelector((state: any) => state.currentUser);
   const username = useSelector((state: any) => state.currentUser.username);
 
@@ -38,8 +37,10 @@ const HomeScreen = ({navigation}: IPageProps) => {
     dispatch(getCurrentUser() as any);
   }, [dispatch]);
 
+  const userId = currentUser?.userid;
+  console.log(userId)
   const fetchFollowedUsers = async (): Promise<string[]> => {
-    const userId = currentUser?.userid;
+    setPostsLoading(true)
     if (!userId) return [];
 
     try {
@@ -58,7 +59,6 @@ const HomeScreen = ({navigation}: IPageProps) => {
   };
 
   const fetchFeedPosts = async () => {
-    setPostsLoading(true);
     try {
       const followedUsers = await fetchFollowedUsers();
       if (followedUsers.length === 0) return [];
@@ -96,7 +96,7 @@ const HomeScreen = ({navigation}: IPageProps) => {
     setRefreshing(false);
   };
 
-  const renderPosts = ({index, item}: {index: number; item: PostsType}) => (
+  const renderPosts = ({item}: {item: PostsType}) => (
     <PostComponent
       id={item.id}
       author={item.author}
@@ -104,14 +104,11 @@ const HomeScreen = ({navigation}: IPageProps) => {
       date={item.createdAt?.toDate ? item.createdAt.toDate() : new Date()}
       username={item.username}
       extendedStyles={{
-        // borderRadius: 0,
-        // marginBottom: 0,
-        // borderTopColor: COLORS.purpleBlue1 + 19,
-        // borderTopWidth: index == 0 ? 0 : 2,
-        // backgroundColor: COLORS.bgColor,
         width: '100%',
       }}
       isNewsFeed
+      onPress={() => navigation.navigate('PostDetails', item)}
+
     />
   );
 
@@ -121,7 +118,7 @@ const HomeScreen = ({navigation}: IPageProps) => {
         style={{
           paddingHorizontal: rS(SPACING.h7),
           flexGrow: 1,
-        //   paddingTop: rS(SPACING.h1),
+          //   paddingTop: rS(SPACING.h1),
         }}>
         <View style={{width: '100%'}}>
           <Text
@@ -140,6 +137,19 @@ const HomeScreen = ({navigation}: IPageProps) => {
               style={{margin: 'auto'}}
               size={rS(FONT_SIZES.h3)}
             />
+          ) : posts.length === 0 ? (
+            <View>
+              <Text
+                style={{
+                  fontSize: rS(FONT_SIZES.h8),
+                  fontFamily: FONT_FAMILY.sb,
+                  color: COLORS.purpleBlue1 + 60,
+                  textAlign: 'center',
+                  marginTop: rS(SPACING.h5),
+                }}>
+                No News Feed? Follow others to update your feed
+              </Text>
+            </View>
           ) : (
             <FlatList
               renderItem={renderPosts}

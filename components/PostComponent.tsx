@@ -11,7 +11,8 @@ type PostComponentProps = {
   content: string;
   username: string;
   extendedStyles?: StyleProp<ViewStyle>;
-  isNewsFeed: boolean;
+  isNewsFeed?: boolean;
+  onPress?: () => void;
 };
 
 const DateTimeDisplay = (date: string | Date) => {
@@ -30,12 +31,15 @@ const PostComponent = ({
   username,
   extendedStyles,
   isNewsFeed,
+  onPress,
 }: PostComponentProps) => {
   console.log(date);
   const reformatedDate = new Date(date.toString());
   // console.log(new Date(`${date}`).toISOString())
   return (
     <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.6}
       key={id}
       style={[
         {
@@ -44,7 +48,7 @@ const PostComponent = ({
           paddingVertical: rS(SPACING.h5),
           //   borderBottomWidth: 1,
           //   borderColor: COLORS.lightgreen + 19,
-          backgroundColor: COLORS.lightBlue1 + 29,
+          backgroundColor: COLORS.lightgray1,
           borderRadius: 20,
           marginBottom: rS(SPACING.h10),
           marginHorizontal: 'auto',

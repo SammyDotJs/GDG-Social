@@ -1,4 +1,11 @@
-import {View, Text, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import SafeArea from '../../../../utils/SafeArea';
@@ -17,14 +24,20 @@ import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCurrentUser} from '../../../../redux/currentUserInfo';
 import {ActivityIndicator} from 'react-native';
+import {PostsType} from '../../Home/HomeScreen';
+import PostComponent from '../../../../components/PostComponent';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
-  const currentUserId = useSelector(state => state.currentUser.userid);
-  const currentUser = useSelector(state => state.currentUser);
+const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
+  navigation,
+  route,
+}) => {
+  const currentUserId = useSelector((state: any) => state.currentUser.userid);
+  const currentUser = useSelector((state: any) => state.currentUser);
   const [isFollowing, setIsFollowing] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  //   console.log(route.params, 'PARAMS');
+  const [postsLoading, setPostsLoading] = useState(false);
   const userDetails = route?.params;
   const username = route?.params.username;
   const fullName = route?.params.fullName;
@@ -35,12 +48,36 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
 
+  const [searchedUserFeed, setSearchedUserFeed] = useState([]);
+  const [refreshing, setRefreshing] = useState();
+
   const dispatch = useDispatch();
 
   console.log(currentUserId, userid);
 
+  const loadSearchedUserFeed = async () => {
+    setPostsLoading(true);
+    try {
+      const snapshot = await firestore()
+        .collection('posts')
+        .where('username', '==', username)
+        .orderBy('createdAt', 'desc')
+        .get();
+
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as PostsType[];
+    } catch (error) {
+      console.error('Error fetching user feed posts:', error);
+    } finally {
+      setPostsLoading(false);
+    }
+  };
+
   const loadSearchedUser = async () => {
     setLoading(true);
+    loadPosts();
     try {
       //   const checkIfFollowing = await firestore().collection('users').doc(userid).collection('following')
       const following = await firestore()
@@ -76,12 +113,18 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
       //   setIsFollowing(checkIfFollowing);
       setFollowers(followersList.length);
       setFollowing(followingList.length);
-      console.log(followersList);
+      //   console.log(followersList);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadPosts = async () => {
+    const fetchedPosts = await loadSearchedUserFeed();
+    setSearchedUserFeed(fetchedPosts);
+    console.log(fetchedPosts, 'FETCHED USER POSTS');
   };
   useEffect(() => {
     loadSearchedUser();
@@ -114,7 +157,7 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
     } catch (error) {
       console.error('Error following user:', error);
     } finally {
-      dispatch(getCurrentUser());
+      dispatch(getCurrentUser() as any);
     }
   };
   const unfollowUser = async () => {
@@ -140,8 +183,23 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
       console.error('Error unfollowing user:', error);
     }
   };
+  const onRefresh = async () => {
+    await loadPosts();
+  };
 
-  if (loading) {
+  const renderPosts = ({item}: {item: PostsType}) => {
+    return (
+      <PostComponent
+        id={item.id}
+        author={item.author}
+        content={item.content}
+        date={item.createdAt.toDate()}
+        username={item.username}
+      />
+    );
+  };
+
+  if (loading || postsLoading) {
     return (
       <SafeArea>
         <ActivityIndicator
@@ -157,132 +215,174 @@ const SearchedUserDetailsScreen = ({navigation, route}: BottomTabBarProps) => {
 
   return (
     <SafeArea>
-      <ScrollView
-        contentContainerStyle={{
-          alignItems: 'center',
-          paddingTop: rS(SPACING.h5),
-        }}>
-        <View
+      <View style={{}}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={{
-            alignItems: 'center',
-            backgroundColor: COLORS.purpleBlue1,
-            width: '90%',
-            padding: rS(SPACING.h8),
-            borderRadius: BORDER_RADIUS.b30,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            marginLeft: rS(SPACING.h5),
           }}>
-          <View style={styles.profileImage}>
-            <Text style={styles.profileText}>{profileLetter}</Text>
-          </View>
-          <View
-            style={{
-              alignItems: 'center',
-              marginVertical: rS(SPACING.h5),
-            }}>
-            <Text
+          <Ionicons
+            name="chevron-back"
+            size={rS(FONT_SIZES.h5)}
+            color={COLORS.purpleBlue1}
+          />
+        </TouchableOpacity>
+        <FlatList
+          data={searchedUserFeed}
+          renderItem={renderPosts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: rS(100),
+          }}
+          ListHeaderComponent={() => (
+            <View
               style={{
-                fontSize: rS(FONT_SIZES.h8),
-                fontFamily: FONT_FAMILY.m,
-                color: COLORS.white,
-              }}>
-              {`@${username}`}
-            </Text>
-            <Text
-              style={{
-                fontSize: rS(FONT_SIZES.h8),
-                fontFamily: FONT_FAMILY.m,
-                color: COLORS.lightBlue1,
-              }}>
-              {fullName}
-            </Text>
-          </View>
-          {/* User action */}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: rS(SPACING.h5),
-              marginVertical: rS(SPACING.h8),
-            }}>
-            {/* followers */}
-            <View>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                {followers}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.white,
-                }}>
-                Followers
-              </Text>
-            </View>
-            {/* following */}
-            <View>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                {following}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.white,
-                }}>
-                Following
-              </Text>
-            </View>
-            {/* posts */}
-            <View>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.b,
-                  fontSize: rS(FONT_SIZES.h6),
-                  color: COLORS.lightgreen,
-                }}>
-                0
-              </Text>
-              <Text
-                style={{
-                  fontFamily: FONT_FAMILY.m,
-                  fontSize: rS(FONT_SIZES.h8),
-                  color: COLORS.white,
-                }}>
-                Posts
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              marginVertical: rS(SPACING.h5),
-            }}>
-            <PrimaryButton
-              title={isFollowing ? 'Unfollow' : 'Follow'}
-              buttonStyle={{
-                paddingHorizontal: rS(SPACING.h5),
-                paddingVertical: rS(SPACING.h13),
                 width: '100%',
-                backgroundColor: isFollowing
-                  ? COLORS.lightBlue1
-                  : COLORS.white,
-              }}
-              titleStyle={{
-                color: isFollowing ? COLORS.white : COLORS.black,
-              }}
-              onPress={isFollowing ? unfollowUser : followUser}
-            />
-          </View>
-        </View>
-      </ScrollView>
+                alignItems: 'center',
+                marginTop: rS(SPACING.h5),
+                paddingBottom: rS(SPACING.h5),
+              }}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: COLORS.purpleBlue1,
+                  width: '90%',
+                  padding: rS(SPACING.h8),
+                  borderRadius: BORDER_RADIUS.b30,
+                }}>
+                <View style={styles.profileImage}>
+                  <Text style={styles.profileText}>{profileLetter}</Text>
+                </View>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    marginVertical: rS(SPACING.h5),
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: rS(FONT_SIZES.h8),
+                      fontFamily: FONT_FAMILY.m,
+                      color: COLORS.white,
+                    }}>
+                    {`@${username}`}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: rS(FONT_SIZES.h8),
+                      fontFamily: FONT_FAMILY.m,
+                      color: COLORS.lightBlue1,
+                    }}>
+                    {fullName}
+                  </Text>
+                </View>
+                {/* User action */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: rS(SPACING.h5),
+                    marginVertical: rS(SPACING.h8),
+                  }}>
+                  {/* followers */}
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.b,
+                        fontSize: rS(FONT_SIZES.h6),
+                        color: COLORS.lightgreen,
+                      }}>
+                      {followers}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.m,
+                        fontSize: rS(FONT_SIZES.h8),
+                        color: COLORS.white,
+                      }}>
+                      Followers
+                    </Text>
+                  </View>
+                  {/* following */}
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.b,
+                        fontSize: rS(FONT_SIZES.h6),
+                        color: COLORS.lightgreen,
+                      }}>
+                      {following}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.m,
+                        fontSize: rS(FONT_SIZES.h8),
+                        color: COLORS.white,
+                      }}>
+                      Following
+                    </Text>
+                  </View>
+                  {/* posts */}
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.b,
+                        fontSize: rS(FONT_SIZES.h6),
+                        color: COLORS.lightgreen,
+                      }}>
+                      0
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONT_FAMILY.m,
+                        fontSize: rS(FONT_SIZES.h8),
+                        color: COLORS.white,
+                      }}>
+                      Posts
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    marginVertical: rS(SPACING.h5),
+                  }}>
+                  <PrimaryButton
+                    title={isFollowing ? 'Unfollow' : 'Follow'}
+                    buttonStyle={{
+                      paddingHorizontal: rS(SPACING.h5),
+                      paddingVertical: rS(SPACING.h13),
+                      width: '100%',
+                      backgroundColor: isFollowing
+                        ? COLORS.lightBlue1 + 19
+                        : COLORS.white,
+                    }}
+                    titleStyle={{
+                      color: isFollowing ? COLORS.white : COLORS.black,
+                    }}
+                    onPress={isFollowing ? unfollowUser : followUser}
+                  />
+                </View>
+              </View>
+            </View>
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+        {searchedUserFeed.length === 0 && (
+          <Text
+            style={{
+              fontSize: rS(FONT_SIZES.h8),
+              fontFamily: FONT_FAMILY.sb,
+              color: COLORS.purpleBlue1 + 60,
+              textAlign: 'center',
+              marginTop: rS(SPACING.h5),
+            }}>
+            No posts
+          </Text>
+        )}
+      </View>
     </SafeArea>
   );
 };

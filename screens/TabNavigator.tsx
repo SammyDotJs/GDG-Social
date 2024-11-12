@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {Text} from 'react-native';
 import SearchScreenNavigator from './Tabs/Search/SearchScreenNavigator';
+import HomeScreenNavigator from './Tabs/Home/HomeScreenNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,8 +31,8 @@ const TabNavigator = () => {
           borderTopLeftRadius: BORDER_RADIUS.b10,
           //   margin: rS(SPACING.h5),
           backgroundColor: COLORS.bgColor,
-          //   elevation: 0,
-          //   borderWidth: 0,
+          elevation: 0,
+          borderWidth: 0,
           height: rS(70),
           paddingVertical: rS(SPACING.h6),
           borderTopWidth: 0,
@@ -61,7 +62,7 @@ const TabNavigator = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeScreenNavigator}
         options={{
           tabBarIcon: ({focused}) => {
             return (
