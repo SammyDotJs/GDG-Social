@@ -19,7 +19,7 @@ import PostAlertModal from '../../../components/PostAlertModal';
 const AddPost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [newPost, setNewPost] = useState('');
-  const [isCreatePostSuccessful, setIsCreatePostSuccessful] = useState(true);
+  const [isCreatePostSuccessful, setIsCreatePostSuccessful] = useState(false);
   const [isCreatePostFailed, setIsCreatePostFailed] = useState(false);
   const author = useSelector(state => state.currentUser.fullName);
 
@@ -86,6 +86,7 @@ const AddPost = () => {
               style={{
                 fontSize: rS(FONT_SIZES.h6),
                 fontFamily: FONT_FAMILY.sb,
+                color: COLORS.lightgreen,
               }}>
               Create a post
             </Text>
@@ -96,11 +97,11 @@ const AddPost = () => {
               value={newPost}
               query={text => setNewPost(text)}
               textInputStyle={{
-                backgroundColor: COLORS.white,
+                backgroundColor: COLORS.searchField,
                 borderWidth: 0,
-                borderBottomWidth: 2,
+                // borderBottomWidth: 2,
                 // borderColor: COLORS.normalgreen,
-                borderRadius: 0,
+                // borderRadius: 0,
                 paddingBottom: rS(SPACING.h13),
                 paddingHorizontal: rS(SPACING.h11),
               }}
@@ -117,6 +118,10 @@ const AddPost = () => {
                   width: rS(100),
                   padding: rS(SPACING.h13),
                   marginLeft: 'auto',
+                  backgroundColor: COLORS.lightgreen,
+                }}
+                titleStyle={{
+                  color: COLORS.black,
                 }}
               />
             </View>

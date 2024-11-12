@@ -7,4 +7,10 @@ export const COLORS = {
   lightgray: '#757575',
   normalgreen: '#1EB15A',
   error: '#ff0000',
+  superlightgray: '#757575',
+  deepTeal: '#254336',
+  darkTeal: '#6B8A7A',
+  teal: '#629584',
+  bgColor: '#070c09',
+  searchField: '#131c16',
 };

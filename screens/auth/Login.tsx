@@ -16,7 +16,8 @@ import {IPageProps} from '../../types/NavigationProps';
 import {KeyboardAvoidingView, Platform} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import LoadingModal from '../../components/LoadingModal';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getCurrentUser} from '../../redux/currentUserInfo';
 
 const Login = ({navigation}: IPageProps) => {
   const [email, setEmail] = useState('');
@@ -24,6 +25,9 @@ const Login = ({navigation}: IPageProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const tryUser = useSelector((state: any) => state.currentUser);
   console.log(tryUser);
+
+  const dispatch = useDispatch();
+
   const handleSignin = () => {
     setIsLoading(true);
     auth()
@@ -45,6 +49,7 @@ const Login = ({navigation}: IPageProps) => {
         console.error(error);
       })
       .finally(() => {
+        dispatch(getCurrentUser() as any);
         setIsLoading(false);
       });
   };
@@ -65,7 +70,11 @@ const Login = ({navigation}: IPageProps) => {
           }}>
           <View style={{width: '100%', marginTop: rS(SPACING.h1)}}>
             <Text
-              style={{fontSize: rS(FONT_SIZES.h3), fontFamily: FONT_FAMILY.sb}}>
+              style={{
+                fontSize: rS(FONT_SIZES.h3),
+                fontFamily: FONT_FAMILY.sb,
+                color: COLORS.lightgreen,
+              }}>
               Login
             </Text>
           </View>
@@ -102,9 +111,23 @@ const Login = ({navigation}: IPageProps) => {
               marginVertical: rS(SPACING.h5),
             }}>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <Text>Don't have an account? </Text>
+              <Text
+                style={{
+                  fontSize: rS(FONT_SIZES.h9),
+                  fontFamily: FONT_FAMILY.r,
+                  color: COLORS.white,
+                }}>
+                Don't have an account?{' '}
+              </Text>
               <TouchableOpacity activeOpacity={0.8} onPress={goToSignUpPage}>
-                <Text style={{color: COLORS.normalgreen}}>Sign up</Text>
+                <Text
+                  style={{
+                    fontSize: rS(FONT_SIZES.h9),
+                    fontFamily: FONT_FAMILY.r,
+                    color: COLORS.normalgreen,
+                  }}>
+                  Sign up
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

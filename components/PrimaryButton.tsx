@@ -25,14 +25,14 @@ const PrimaryButton = ({
         {
           //   width: '100%',
           padding: rS(SPACING.h10),
-          backgroundColor: COLORS.black,
+          backgroundColor: COLORS.lightgreen,
           borderRadius: 99,
         },
         buttonStyle,
       ]}
       titleStyle={[
         {
-          color: COLORS.white,
+          color: COLORS.black,
           fontSize: rS(FONT_SIZES.h8),
           fontFamily: FONT_FAMILY.m,
         },

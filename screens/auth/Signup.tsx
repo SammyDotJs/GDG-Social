@@ -27,6 +27,10 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import firestore from '@react-native-firebase/firestore';
+import PostAlertModal from '../../components/PostAlertModal';
+import {useDispatch} from 'react-redux';
+import {getCurrentUser} from '../../redux/currentUserInfo';
 
 const inputErrorStyles = {
   textAlign: 'left',
@@ -38,6 +42,7 @@ const inputErrorStyles = {
 
 const Signup = ({navigation}: IPageProps) => {
   const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cpassword, setCpassword] = useState('');
@@ -48,6 +53,9 @@ const Signup = ({navigation}: IPageProps) => {
   const [passwordError, setPasswordError] = useState('');
   const [cPasswordError, setCpasswordError] = useState('');
 
+  const [isSignUpSuccessful, setIsSignUpSuccessful] = useState(false);
+  const [isSignUpFailed, setIsSignUpFailed] = useState(false);
+
   const hasUpper = uppercaseRegex.test(password);
   const hasLowercase = lowercaseRegex.test(password);
   const hasNumber = numberRegex.test(password);
@@ -56,6 +64,11 @@ const Signup = ({navigation}: IPageProps) => {
   const lengthValid = password.length < 8;
   const emailIsValid = email.includes('@');
   const goToSignUpPage = () => navigation.navigate('Login');
+
+  const dispatch = useDispatch();
+  //   useEffect(() => {
+  //     dispatch(getCurrentUser());
+  //   }, [dispatch]);
 
   useEffect(() => {
     if (email.length === 0) {
@@ -100,7 +113,26 @@ const Signup = ({navigation}: IPageProps) => {
     );
   }, [password, email, cpassword]);
 
-  const handleSignup = () => {
+  const createUser = async () => {
+    try {
+      await firestore()
+        .collection('users')
+        .add({
+          fullName,
+          email,
+          followers: 0,
+          following: 0,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          username: username.toLowerCase().replace(/\s+/g, ''),
+        });
+
+      console.log('Post created successfully!');
+    } catch (error) {
+      console.error('Error adding post: ', error);
+    }
+  };
+
+  const handleSignup = async () => {
     !conditionsMet && Alert.alert('Please fill in your details correctly');
     if (conditionsMet) {
       setIsLoading(true);
@@ -109,6 +141,11 @@ const Signup = ({navigation}: IPageProps) => {
         .then(userCredential => {
           const user = userCredential.user;
           console.log('User account created & signed in!');
+          setIsSignUpSuccessful(true);
+          setTimeout(() => {
+            setIsSignUpSuccessful(false);
+          }, 2000);
+          navigation.navigate('Tabs');
           return user.updateProfile({
             displayName: fullName,
           });
@@ -121,12 +158,22 @@ const Signup = ({navigation}: IPageProps) => {
           if (error.code === 'auth/invalid-email') {
             console.log('That email address is invalid!');
           }
-
+          setIsSignUpFailed(true);
+          setTimeout(() => {
+            setIsSignUpFailed(false);
+          }, 3000);
           console.error(error);
         })
         .finally(() => {
+          dispatch(getCurrentUser());
           setIsLoading(false);
+          setUsername('');
+          setFullName('');
+          setEmail('');
+          setPassword('');
+          setCpassword('');
         });
+      await createUser();
     }
   };
 
@@ -136,6 +183,14 @@ const Signup = ({navigation}: IPageProps) => {
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <LoadingModal isVisible={isLoading} />
+        <PostAlertModal
+          isVisible={isSignUpSuccessful}
+          title="Account created successfully"
+          onClose={() => setIsSignUpSuccessful(false)}
+          modalContainerStyle={{
+            backgroundColor: COLORS.normalgreen,
+          }}
+        />
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: rS(SPACING.h7),
@@ -150,6 +205,7 @@ const Signup = ({navigation}: IPageProps) => {
               style={{
                 fontSize: rS(FONT_SIZES.h4),
                 fontFamily: FONT_FAMILY.sb,
+                color: COLORS.lightgreen,
               }}>
               Create Account
             </Text>
@@ -162,6 +218,18 @@ const Signup = ({navigation}: IPageProps) => {
               marginVertical: rS(SPACING.h5),
               marginHorizontal: 'auto',
             }}>
+            <View
+              style={{
+                width: '100%',
+              }}>
+              <InputField
+                label="Username"
+                placeholder="Enter your username"
+                query={text => setUsername(text)}
+                value={username}
+              />
+              <Text style={inputErrorStyles}></Text>
+            </View>
             <View
               style={{
                 width: '100%',
@@ -230,10 +298,19 @@ const Signup = ({navigation}: IPageProps) => {
                 flexDirection: 'row',
                 marginHorizontal: 'auto',
               }}>
-              <Text style={{}}>Already have an account? </Text>
+              <Text
+                style={{
+                  fontSize: rS(FONT_SIZES.h9),
+                  fontFamily: FONT_FAMILY.r,
+                  color: COLORS.white,
+                }}>
+                Already have an account?{' '}
+              </Text>
               <TouchableOpacity activeOpacity={0.8} onPress={goToSignUpPage}>
                 <Text
                   style={{
+                    fontSize: rS(FONT_SIZES.h9),
+                    fontFamily: FONT_FAMILY.r,
                     color: COLORS.normalgreen,
                   }}>
                   Log In

@@ -1,5 +1,5 @@
 import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SafeArea from '../../../utils/SafeArea';
 import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../../../constants';
 import {rS} from '../../../utils';
@@ -7,14 +7,16 @@ import {styles} from './styles/homescreenStyles';
 import {useDispatch, useSelector} from 'react-redux';
 import {IPageProps} from '../../../types/NavigationProps';
 import {getCurrentUser} from '../../../redux/currentUserInfo';
+import InputField from '../../../components/InputField';
 
 const HomeScreen = ({navigation}: IPageProps) => {
   const fullName = useSelector((state: any) => state.currentUser.fullName);
   const profileLetter = fullName?.charAt(0).toUpperCase();
+
   const dispatch = useDispatch();
-//   useEffect(() => {
-//     dispatch(getCurrentUser());
-//   }, [dispatch]);
+    useEffect(() => {
+      dispatch(getCurrentUser());
+    }, [dispatch]);
   console.log(fullName);
 
   return (

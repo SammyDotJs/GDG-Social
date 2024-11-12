@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {Text} from 'react-native';
+import SearchScreenNavigator from './Tabs/Search/SearchScreenNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,12 +26,13 @@ const TabNavigator = () => {
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
-            // borderRadius: 99,
+          borderTopRightRadius: BORDER_RADIUS.b10,
+          borderTopLeftRadius: BORDER_RADIUS.b10,
           //   margin: rS(SPACING.h5),
-          backgroundColor: COLORS.white,
-          elevation: 0,
-          borderWidth: 0,
-          height: rS(60),
+          backgroundColor: COLORS.bgColor,
+          //   elevation: 0,
+          //   borderWidth: 0,
+          height: rS(70),
           paddingVertical: rS(SPACING.h6),
           borderTopWidth: 0,
         },
@@ -41,7 +43,7 @@ const TabNavigator = () => {
           color: COLORS.black,
         },
         tabBarItemStyle: {
-        //   paddingVertical: rS(SPACING.h13),
+          paddingTop: rS(SPACING.h9),
         },
         tabBarHideOnKeyboard: true,
         tabBarLabel: ({focused, children}) => {
@@ -50,14 +52,12 @@ const TabNavigator = () => {
               style={{
                 fontSize: rS(FONT_SIZES.h9),
                 fontFamily: FONT_FAMILY.r,
-                fontWeight: 300,
-                color: focused ? COLORS.normalgreen : COLORS.black,
+                color: focused ? COLORS.normalgreen : COLORS.white,
               }}>
               {children}
             </Text>
           );
         },
-
       }}>
       <Tab.Screen
         name="Home"
@@ -68,7 +68,22 @@ const TabNavigator = () => {
               <AntDesign
                 name="home"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.black}
+                color={focused ? COLORS.normalgreen : COLORS.white}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreenNavigator}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Feather
+                name="search"
+                size={rS(FONT_SIZES.h5)}
+                color={focused ? COLORS.normalgreen : COLORS.white}
               />
             );
           },
@@ -83,7 +98,7 @@ const TabNavigator = () => {
               <MaterialIcons
                 name="post-add"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.black}
+                color={focused ? COLORS.normalgreen : COLORS.white}
               />
             );
           },
@@ -98,7 +113,7 @@ const TabNavigator = () => {
               <Feather
                 name="user"
                 size={rS(FONT_SIZES.h5)}
-                color={focused ? COLORS.normalgreen : COLORS.black}
+                color={focused ? COLORS.normalgreen : COLORS.white}
               />
             );
           },
