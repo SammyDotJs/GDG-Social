@@ -4,7 +4,6 @@ import firestore from '@react-native-firebase/firestore';
 import {AppDispatch, RootState} from './store';
 
 interface AsyncThunkConfig {
-  // Define any additional parameters you need here
   state?: RootState;
   dispatch?: AppDispatch;
   rejectValue?: string;

@@ -14,7 +14,6 @@ const SafeArea: React.FC<SafeAreaTypes> = ({children, style}) => {
       style={[
         {
           flex: 1,
-          //   backgroundColor: '#ffffff',
           backgroundColor: COLORS.bgColor,
           paddingTop: StatusBar?.currentHeight,
         },

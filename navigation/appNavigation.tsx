@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../screens/Tabs/Home/HomeScreen';
 import Login from '../screens/auth/Login';
 import Signup from '../screens/auth/Signup';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';

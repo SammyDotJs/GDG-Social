@@ -4,11 +4,11 @@ type UserMetadata = {
 };
 
 type MultiFactor = {
-  enrolledFactors: any[]; // Adjust this type if you know the structure of the enrolled factors
+  enrolledFactors: any[]; 
 };
 
 type ProviderData = {
-  [key: string]: any; // Adjust or replace `any` based on the known properties
+  [key: string]: any;
 };
 
 export type User = {
