@@ -48,7 +48,7 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
   const [following, setFollowing] = useState(0);
 
   const [searchedUserFeed, setSearchedUserFeed] = useState([]);
-  const [refreshing, setRefreshing] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -63,6 +63,7 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
         .orderBy('createdAt', 'desc')
         .get();
 
+      setPostsLoading(false);
       return snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -71,6 +72,7 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
       console.error('Error fetching user feed posts:', error);
     } finally {
       setPostsLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -78,7 +80,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
     setLoading(true);
     loadPosts();
     try {
-      //   const checkIfFollowing = await firestore().collection('users').doc(userid).collection('following')
       const following = await firestore()
         .collection('users')
         .doc(userid)
@@ -109,10 +110,8 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
       } else {
         setIsFollowing(false);
       }
-      //   setIsFollowing(checkIfFollowing);
       setFollowers(followersList.length);
       setFollowing(followingList.length);
-      //   console.log(followersList);
     } catch (error) {
       console.error(error);
     } finally {
@@ -128,7 +127,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
   useEffect(() => {
     loadSearchedUser();
   }, []);
-  console.log(isFollowing);
   const followUser = async () => {
     try {
       // Add target user to the following list of the current user
@@ -183,6 +181,7 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
     }
   };
   const onRefresh = async () => {
+    setRefreshing(true);
     await loadPosts();
   };
 
@@ -197,20 +196,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
       />
     );
   };
-
-  if (loading || postsLoading) {
-    return (
-      <SafeArea>
-        <ActivityIndicator
-          color={COLORS.placeholder}
-          style={{
-            margin: 'auto',
-          }}
-          size={rS(FONT_SIZES.h3)}
-        />
-      </SafeArea>
-    );
-  }
 
   return (
     <SafeArea>
@@ -347,7 +332,18 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
                     marginVertical: rS(SPACING.h5),
                   }}>
                   <PrimaryButton
-                    title={isFollowing ? 'Unfollow' : 'Follow'}
+                    title={
+                      loading ? (
+                        <ActivityIndicator
+                          color={COLORS.lightBlue1}
+                          size={rS(FONT_SIZES.h4)}
+                        />
+                      ) : isFollowing ? (
+                        'Unfollow'
+                      ) : (
+                        'Follow'
+                      )
+                    }
                     buttonStyle={{
                       paddingHorizontal: rS(SPACING.h5),
                       paddingVertical: rS(SPACING.h13),
@@ -355,6 +351,8 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
                       backgroundColor: isFollowing
                         ? COLORS.lightBlue1 + 19
                         : COLORS.white,
+                      minWidth: rS(120),
+                      minHeight: rS(SPACING.h1),
                     }}
                     titleStyle={{
                       color: isFollowing ? COLORS.white : COLORS.black,
@@ -369,17 +367,19 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
-        {searchedUserFeed.length === 0 && (
-          <Text
-            style={{
-              fontSize: rS(FONT_SIZES.h8),
-              fontFamily: FONT_FAMILY.sb,
-              color: COLORS.purpleBlue1 + 60,
-              textAlign: 'center',
-              marginTop: rS(SPACING.h5),
-            }}>
-            No posts
-          </Text>
+        {(
+          searchedUserFeed.length === 0 && (
+            <Text
+              style={{
+                fontSize: rS(FONT_SIZES.h8),
+                fontFamily: FONT_FAMILY.sb,
+                color: COLORS.purpleBlue1 + 60,
+                textAlign: 'center',
+                marginTop: rS(SPACING.h5),
+              }}>
+              No posts
+            </Text>
+          )
         )}
       </View>
     </SafeArea>

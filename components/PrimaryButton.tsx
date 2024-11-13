@@ -6,7 +6,7 @@ import {rS} from '../utils';
 import {ViewStyle} from 'react-native-size-matters';
 
 type ButtonProps = {
-  title: string;
+  title: string | any;
   buttonStyle?: any;
   titleStyle?: StyleProp<TextStyle>;
   onPress: () => void;

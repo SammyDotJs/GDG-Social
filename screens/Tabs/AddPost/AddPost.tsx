@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import SafeArea from '../../../utils/SafeArea';
@@ -50,6 +51,10 @@ const AddPost = () => {
   };
 
   const AddPost = async () => {
+    if (newPost.trim() === '') {
+      Alert.alert('Please fill in the text field');
+      return;
+    }
     await createPost(newPost, author);
   };
 

@@ -29,20 +29,20 @@ const TabNavigator = () => {
           position: 'absolute',
           borderTopRightRadius: BORDER_RADIUS.b10,
           borderTopLeftRadius: BORDER_RADIUS.b10,
-          //   margin: rS(SPACING.h5),
           backgroundColor: COLORS.bgColor,
           elevation: 0,
           borderWidth: 0,
           height: rS(70),
           paddingVertical: rS(SPACING.h6),
           borderTopWidth: 0,
+
         },
-        tabBarLabelStyle: {
-          fontSize: rS(FONT_SIZES.h9),
-          fontFamily: FONT_FAMILY.r,
-          fontWeight: 300,
-          color: COLORS.black,
-        },
+        // tabBarLabelStyle: {
+        //   fontSize: rS(FONT_SIZES.h9),
+        //   fontFamily: FONT_FAMILY.r,
+        //   fontWeight: 300,
+        //   color: COLORS.black,
+        // },
         tabBarItemStyle: {
           paddingTop: rS(SPACING.h9),
         },

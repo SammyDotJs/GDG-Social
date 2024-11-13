@@ -11,7 +11,7 @@ import React, {useEffect, useState} from 'react';
 import SafeArea from '../../../utils/SafeArea';
 import {styles} from './styles/profileScreenStyles';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   BORDER_RADIUS,
   COLORS,
@@ -23,7 +23,6 @@ import {rS} from '../../../utils';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
-import {getCurrentUser} from '../../../redux/currentUserInfo';
 import PostComponent from '../../../components/PostComponent';
 import {PostsType} from '../Home/HomeScreen';
 
@@ -96,6 +95,16 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
     getPosts();
     // setUserPosts;
   }, []);
+  const deletePost = async (postId: string) => {
+    try {
+      await firestore().collection('posts').doc(postId).delete();
+      console.log('Post deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting post: ', error);
+    } finally {
+      await getPosts();
+    }
+  };
 
   const renderPosts = ({item}: {item: PostsType}) => {
     return (
@@ -105,6 +114,8 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
         content={item.content}
         date={item.timestamp}
         username={item.username}
+        deletePost={() => deletePost(item.id)}
+        isProfile
       />
     );
   };
@@ -113,13 +124,18 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
     <SafeArea>
       <View>
         {isFetching ? (
-          <ActivityIndicator
-            color={COLORS.placeholder}
+          <View
             style={{
-              margin: 'auto',
-            }}
-            size={rS(FONT_SIZES.h3)}
-          />
+              height: '90%',
+            }}>
+            <ActivityIndicator
+              color={COLORS.purpleBlue1}
+              style={{
+                margin: 'auto',
+              }}
+              size={rS(FONT_SIZES.h1)}
+            />
+          </View>
         ) : (
           <View
             style={

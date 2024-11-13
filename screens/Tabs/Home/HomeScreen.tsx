@@ -91,7 +91,10 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
   };
 
   useEffect(() => {
-    loadPosts();
+    const fetchPosts = async () => {
+      await loadPosts();
+    };
+    fetchPosts();
   }, []);
 
   const onRefresh = async () => {
@@ -134,11 +137,18 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
         </View>
         <View>
           {postsLoading ? (
-            <ActivityIndicator
-              color={COLORS.placeholder}
-              style={{margin: 'auto'}}
-              size={rS(FONT_SIZES.h3)}
-            />
+            <View
+              style={{
+                height: '90%',
+              }}>
+              <ActivityIndicator
+                color={COLORS.purpleBlue1}
+                style={{
+                  margin: 'auto',
+                }}
+                size={rS(FONT_SIZES.h1)}
+              />
+            </View>
           ) : posts.length === 0 ? (
             <View>
               <Text
@@ -158,7 +168,7 @@ const HomeScreen: React.FC<IPageProps> = ({navigation}) => {
               data={posts}
               keyExtractor={item => item.id}
               contentContainerStyle={{
-                paddingBottom: rS(100),
+                paddingBottom: rS(200),
                 marginTop: rS(SPACING.h1),
               }}
               refreshControl={

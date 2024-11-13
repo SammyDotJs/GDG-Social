@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {Text} from 'react-native';
-import {CONSTANT_STYLES} from '../constants';
+import {BORDER_RADIUS, COLORS, CONSTANT_STYLES, SPACING} from '../constants';
 import {rS} from '../utils';
 import LottieView from 'lottie-react-native';
 import Modal from 'react-native-modal';
@@ -27,16 +27,18 @@ const LoadingModal = ({isVisible}: LoadingProps) => {
         style={[
           modalStyles.container,
           {
-            width: rS(80),
-            height: rS(80),
+            width: rS(50),
+            height: rS(50),
+            borderRadius: BORDER_RADIUS.b10,
+            backgroundColor: COLORS.white,
           },
           CONSTANT_STYLES.flexColumn,
         ]}>
         <LottieView
           autoPlay
           style={{
-            width: 70,
-            height: 70,
+            width: 40,
+            height: 40,
           }}
           source={require('../assets/animations/Ntl4ulo41s.json')}
         />

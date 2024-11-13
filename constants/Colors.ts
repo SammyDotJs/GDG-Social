@@ -1,5 +1,4 @@
 export const COLORS = {
-  gray: '#101828',
   white: '#FFFFFF',
   black: '#000000',
   placeholder: '#9BB19B',
@@ -7,12 +6,9 @@ export const COLORS = {
   lightgray: '#757575',
   normalgreen: '#1EB15A',
   error: '#ff0000',
-  superlightgray: '#757575',
   deepTeal: '#254336',
   darkTeal: '#6B8A7A',
   teal: '#629584',
-  //   bgColor: '#070c09',
-  //   searchField: '#131c16',
   bgColor: '#FFFFFF',
   searchField: '#EEEEEE',
   lightBrown: '#D8D2C2',
@@ -20,4 +16,5 @@ export const COLORS = {
   lightBlue1: '#7AB2D3',
   lightgray1: '#EBF4F6',
   purpleBlue1: '#092635',
+  lightpurple:"#f6f1f5"
 };

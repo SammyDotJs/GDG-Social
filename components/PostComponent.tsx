@@ -3,6 +3,7 @@ import React from 'react';
 import {COLORS, FONT_FAMILY, FONT_SIZES, SPACING} from '../constants';
 import {rS} from '../utils';
 import {formatDistanceToNow} from 'date-fns';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 type PostComponentProps = {
   id: string;
@@ -13,6 +14,9 @@ type PostComponentProps = {
   extendedStyles?: StyleProp<ViewStyle>;
   isNewsFeed?: boolean;
   onPress?: () => void;
+  goToDetailsScreen?: () => void;
+  deletePost?: () => void;
+  isProfile?: boolean;
 };
 
 const DateTimeDisplay = (date: string | Date) => {
@@ -30,12 +34,13 @@ const PostComponent = ({
   content,
   username,
   extendedStyles,
-  isNewsFeed,
+  isProfile,
   onPress,
+  goToDetailsScreen,
+  deletePost,
 }: PostComponentProps) => {
   console.log(date);
   const reformatedDate = new Date(date.toString());
-  // console.log(new Date(`${date}`).toISOString())
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -46,9 +51,7 @@ const PostComponent = ({
           width: '90%',
           paddingHorizontal: rS(SPACING.h8),
           paddingVertical: rS(SPACING.h5),
-          //   borderBottomWidth: 1,
-          //   borderColor: COLORS.lightgreen + 19,
-          backgroundColor: COLORS.lightgray1,
+          backgroundColor: COLORS.lightpurple,
           borderRadius: 20,
           marginBottom: rS(SPACING.h10),
           marginHorizontal: 'auto',
@@ -65,19 +68,21 @@ const PostComponent = ({
           style={{
             flexDirection: 'row',
           }}>
+          <TouchableOpacity onPress={goToDetailsScreen}>
+            <Text
+              style={{
+                fontSize: rS(FONT_SIZES.h10),
+                fontFamily: FONT_FAMILY.sbi,
+                color: COLORS.brownGray,
+              }}>
+              {`${author}.`}
+            </Text>
+          </TouchableOpacity>
           <Text
             style={{
               fontSize: rS(FONT_SIZES.h10),
-              fontFamily: FONT_FAMILY.sbi,
-              color: COLORS.brownGray,
-            }}>
-            {`${author}.`}
-          </Text>
-          <Text
-            style={{
-              fontSize: rS(FONT_SIZES.h10),
-              fontFamily: FONT_FAMILY.ri,
-              color: COLORS.lightBlue1 + 89,
+              fontFamily: FONT_FAMILY.mi,
+              color: COLORS.lightBlue1,
               marginLeft: rS(SPACING.h10),
             }}>
             {`@${username}`}
@@ -106,6 +111,17 @@ const PostComponent = ({
           {content}
         </Text>
       </View>
+      {isProfile && (
+        <TouchableOpacity
+          onPress={deletePost}
+          style={{
+            marginLeft: 'auto',
+            width: rS(SPACING.h5),
+            height: rS(SPACING.h5),
+          }}>
+          <EvilIcons name="trash" size={rS(SPACING.h5)} color={COLORS.error} />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 };
