@@ -34,7 +34,10 @@ yarn install
 ```
 
 ## Running the App
-## On Android (Using Emulator or Physical Device)
+## On Android (Using Emulator or Physical Device(scrcpy))
+
+TO use scrcpy (advisable) go to their github reposiroty: [scrcpy gitHub repository](https://github.com/Genymobile/scrcpy)
+
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
 1. Start an Android emulator using Android Studio or connect a physical Android device with USB debugging enabled.
@@ -56,14 +59,5 @@ npm run android
 yarn android
 ```
 
-### For iOS
 
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+If everything is set up _correctly_, you should see your new app running in your _Android Emulator_  shortly provided you have set up your emulator correctly.
