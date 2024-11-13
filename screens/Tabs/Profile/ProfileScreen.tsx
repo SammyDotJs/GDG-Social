@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
@@ -25,14 +24,16 @@ import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import PostComponent from '../../../components/PostComponent';
 import {PostsType} from '../Home/HomeScreen';
+import {IPageProps} from '../../../types/NavigationProps';
 
-type PostataProps = {
+type PostDataProps = {
   id: string;
   author: string;
   content: string;
 };
 
-const ProfileScreen = ({navigation}: BottomTabBarProps) => {
+const ProfileScreen = ({navigation}: IPageProps) => {
+  // Accessing user data from Redux state
   const currentUser = useSelector((state: any) => state.currentUser);
   const username = useSelector((state: any) => state.currentUser.username);
   const fullName = useSelector((state: any) => state.currentUser.fullName);
@@ -42,17 +43,16 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
   const followers = useSelector((state: any) => state.currentUser.followers);
 
   const [isFetching, setIsFetching] = useState(false);
-
-  console.log(currentUser);
-
   const [userPosts, setUserPosts] = useState<PostsType[]>([]);
-  const [refreshing, setRefreshing] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
+  // Logs the user out and navigates to Login screen
   const handleLogOut = () => {
     auth().signOut();
     navigation.navigate('Login');
   };
 
+  // Fetches user-specific posts from Firestore
   const fetchPosts = async () => {
     setIsFetching(true);
     try {
@@ -70,7 +70,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
           ...doc.data(),
         });
       });
-      return posts; // Use in FlatList or other UI components
+      return posts;
     } catch (error) {
       console.error('Error fetching posts: ', error);
     } finally {
@@ -78,23 +78,27 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
     }
   };
 
+  // Refreshes post data
   const onRefresh = async () => {
     await getPosts();
   };
 
+  // Gets posts and sets the data
   const getPosts = async () => {
     try {
       const data = await fetchPosts();
-      console.log(data);
       setUserPosts(data);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
+
+  // Fetch posts on component mount
   useEffect(() => {
     getPosts();
-    // setUserPosts;
   }, []);
+
+  // Deletes a post by ID
   const deletePost = async (postId: string) => {
     try {
       await firestore().collection('posts').doc(postId).delete();
@@ -106,24 +110,24 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
     }
   };
 
-  const renderPosts = ({item}: {item: PostsType}) => {
-    return (
-      <PostComponent
-        id={item.id}
-        author={item.author}
-        content={item.content}
-        date={item.timestamp}
-        username={item.username}
-        deletePost={() => deletePost(item.id)}
-        isProfile
-      />
-    );
-  };
+  // Renders a single post
+  const renderPosts = ({item}: {item: PostsType}) => (
+    <PostComponent
+      id={item.id}
+      author={item.author}
+      content={item.content}
+      date={item.timestamp}
+      username={item.username}
+      deletePost={() => deletePost(item.id)}
+      isProfile
+    />
+  );
 
   return (
     <SafeArea>
       <View>
         {isFetching ? (
+          // Display loading indicator
           <View
             style={{
               height: '90%',
@@ -137,12 +141,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
             />
           </View>
         ) : (
-          <View
-            style={
-              {
-                //   paddingBottom: rS(200),
-              }
-            }>
+          <View>
             <FlatList
               data={userPosts}
               renderItem={renderPosts}
@@ -151,7 +150,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
               }}
               ListHeaderComponent={() => (
                 <>
-                  {/* Log out */}
+                  {/* Log out button */}
                   <TouchableOpacity
                     onPress={handleLogOut}
                     style={{
@@ -174,12 +173,13 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                       color={COLORS.error}
                     />
                   </TouchableOpacity>
+
+                  {/* User profile section */}
                   <View
                     style={{
                       width: '100%',
                       alignItems: 'center',
                       marginTop: rS(SPACING.h5),
-                      // paddingBottom: rS(SPACING.h5),
                     }}>
                     <View
                       style={{
@@ -214,7 +214,8 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                           {email}
                         </Text>
                       </View>
-                      {/* User action */}
+
+                      {/* Followers, Following, Posts section */}
                       <View
                         style={{
                           flexDirection: 'row',
@@ -222,13 +223,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                           gap: rS(SPACING.h5),
                           marginVertical: rS(SPACING.h8),
                         }}>
-                        {/* followers */}
-                        <View
-                          style={
-                            {
-                              // alignItems:"center"
-                            }
-                          }>
+                        <View>
                           <Text
                             style={{
                               fontFamily: FONT_FAMILY.b,
@@ -246,13 +241,7 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                             Followers
                           </Text>
                         </View>
-                        {/* following */}
-                        <View
-                          style={
-                            {
-                              // alignItems:"center"
-                            }
-                          }>
+                        <View>
                           <Text
                             style={{
                               fontFamily: FONT_FAMILY.b,
@@ -270,20 +259,14 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
                             Following
                           </Text>
                         </View>
-                        {/* posts */}
-                        <View
-                          style={
-                            {
-                              // alignItems:"center"
-                            }
-                          }>
+                        <View>
                           <Text
                             style={{
                               fontFamily: FONT_FAMILY.b,
                               fontSize: rS(FONT_SIZES.h6),
                               color: COLORS.lightgreen,
                             }}>
-                            0
+                            {userPosts.length}
                           </Text>
                           <Text
                             style={{
@@ -322,8 +305,6 @@ const ProfileScreen = ({navigation}: BottomTabBarProps) => {
           </View>
         )}
       </View>
-      {/* </View> */}
-      {/* </ScrollView> */}
     </SafeArea>
   );
 };

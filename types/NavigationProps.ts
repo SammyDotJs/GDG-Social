@@ -6,6 +6,7 @@ type RootStackParamList = {
   Signup: undefined;
   Login: undefined;
   Tabs: undefined;
+  ProfileScreen: undefined;
   PostDetails: PostsType;
   DetailsScreen: {};
 };

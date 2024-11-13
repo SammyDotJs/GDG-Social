@@ -20,23 +20,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getCurrentUser} from '../../redux/currentUserInfo';
 
 const Login = ({navigation}: IPageProps) => {
+  //user input details
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
-  const tryUser = useSelector((state: any) => state.currentUser);
-  console.log(tryUser);
 
   const dispatch = useDispatch();
 
+  //function to sign in user
   const handleSignin = () => {
     setIsLoading(true);
     auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        navigation.navigate('Tabs');
-        console.log('User account created & signed in!');
-        console.log(user);
-      })
+      .then(() => navigation.navigate('Tabs'))
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
@@ -51,10 +49,11 @@ const Login = ({navigation}: IPageProps) => {
       .finally(() => {
         dispatch(getCurrentUser() as any);
         setIsLoading(false);
+        //setting loading state to false after loggin in the user
       });
   };
 
-  const goToSignUpPage = () => navigation.navigate('Signup');
+  const goToSignUpPage = () => navigation.navigate('Signup'); //function to go to sign up page if user does not have an account
   return (
     <SafeArea>
       <KeyboardAvoidingView
@@ -138,5 +137,3 @@ const Login = ({navigation}: IPageProps) => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({});

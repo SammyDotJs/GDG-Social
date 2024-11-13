@@ -26,7 +26,6 @@ const AppNavigation = () => {
   const onAuthStateChanged = (
     user: FirebaseAuthTypes.User | null | undefined,
   ) => {
-    // console.log(user, 'uh');
     if (initializing) setInitializing(false);
     if (user) {
       dispatch(getCurrentUser() as any);
@@ -37,7 +36,6 @@ const AppNavigation = () => {
   };
 
   useEffect(() => {
-    // console.log(user);
     if (!currentUser) setInitializing(false);
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
 

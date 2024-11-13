@@ -20,8 +20,6 @@ type PostComponentProps = {
 };
 
 const DateTimeDisplay = (date: string | Date) => {
-  //   const givenDate = new Date(date);
-
   const timeAgo = formatDistanceToNow(date, {addSuffix: true});
 
   return timeAgo;
@@ -39,7 +37,6 @@ const PostComponent = ({
   goToDetailsScreen,
   deletePost,
 }: PostComponentProps) => {
-  console.log(date);
   const reformatedDate = new Date(date.toString());
   return (
     <TouchableOpacity

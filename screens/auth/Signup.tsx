@@ -29,10 +29,11 @@ import {
 } from 'react-native-responsive-screen';
 import firestore from '@react-native-firebase/firestore';
 import PostAlertModal from '../../components/PostAlertModal';
-import {useDispatch} from 'react-redux';
 import {getCurrentUser} from '../../redux/currentUserInfo';
+import {useDispatch} from 'react-redux';
 
 const Signup = ({navigation}: IPageProps) => {
+  //user input details
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -40,14 +41,15 @@ const Signup = ({navigation}: IPageProps) => {
   const [cpassword, setCpassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const [conditionsMet, setConditionsMet] = useState(false);
+  const [conditionsMet, setConditionsMet] = useState(false); //checking whether all consitions are met to submit the form
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [cPasswordError, setCpasswordError] = useState('');
-
+  // state variables for determining whether the sign up was successful or failed
   const [isSignUpSuccessful, setIsSignUpSuccessful] = useState(false);
   const [isSignUpFailed, setIsSignUpFailed] = useState(false);
 
+  //test varaibles for the password field
   const hasUpper = uppercaseRegex.test(password);
   const hasLowercase = lowercaseRegex.test(password);
   const hasNumber = numberRegex.test(password);
@@ -55,13 +57,11 @@ const Signup = ({navigation}: IPageProps) => {
 
   const lengthValid = password.length < 8;
   const emailIsValid = email.includes('@');
-  const goToSignUpPage = () => navigation.navigate('Login');
+  const goToLoginPage = () => navigation.navigate('Login'); //function to go to log in page if user has an account
 
   const dispatch = useDispatch();
-  //   useEffect(() => {
-  //     dispatch(getCurrentUser());
-  //   }, [dispatch]);
 
+  //authentication checking for the email and password fields
   useEffect(() => {
     if (email.length === 0) {
       setEmailError('');
@@ -102,9 +102,10 @@ const Signup = ({navigation}: IPageProps) => {
         hasLowercase &&
         hasNumber &&
         hasSymbol,
-    );
+    ); //setting the conditionsMet state to true if all fields are positive
   }, [password, email, cpassword]);
 
+  //function to create user with firestore
   const createUser = async () => {
     try {
       await firestore()
@@ -124,10 +125,13 @@ const Signup = ({navigation}: IPageProps) => {
     }
   };
 
+  //function to sign up user
   const handleSignup = async () => {
     !conditionsMet && Alert.alert('Please fill in your details correctly');
     if (conditionsMet) {
-      setIsLoading(true);
+      setIsLoading(true); //setting the loading state during signing up
+
+      //creating the user
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
@@ -143,6 +147,7 @@ const Signup = ({navigation}: IPageProps) => {
           });
         })
         .catch(error => {
+          //catching any possible error occurence
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
           }
@@ -157,6 +162,7 @@ const Signup = ({navigation}: IPageProps) => {
           console.error(error);
         })
         .finally(() => {
+          //setting all inputs empty after signing up
           dispatch(getCurrentUser() as any);
           setIsLoading(false);
           setUsername('');
@@ -181,6 +187,14 @@ const Signup = ({navigation}: IPageProps) => {
           onClose={() => setIsSignUpSuccessful(false)}
           modalContainerStyle={{
             backgroundColor: COLORS.normalgreen,
+          }}
+        />
+        <PostAlertModal
+          isVisible={isSignUpFailed}
+          title="Account creation failed!"
+          onClose={() => setIsSignUpFailed(false)}
+          modalContainerStyle={{
+            backgroundColor: COLORS.error,
           }}
         />
         <ScrollView
@@ -339,7 +353,7 @@ const Signup = ({navigation}: IPageProps) => {
                 }}>
                 Already have an account?{' '}
               </Text>
-              <TouchableOpacity activeOpacity={0.8} onPress={goToSignUpPage}>
+              <TouchableOpacity activeOpacity={0.8} onPress={goToLoginPage}>
                 <Text
                   style={{
                     fontSize: rS(FONT_SIZES.h9),
@@ -359,4 +373,3 @@ const Signup = ({navigation}: IPageProps) => {
 
 export default Signup;
 
-const styles = StyleSheet.create({});

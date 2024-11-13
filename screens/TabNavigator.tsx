@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from './Tabs/Home/HomeScreen';
 import AddPost from './Tabs/AddPost/AddPost';
 import ProfileScreen from './Tabs/Profile/ProfileScreen';
 import {
@@ -37,12 +36,6 @@ const TabNavigator = () => {
           borderTopWidth: 0,
 
         },
-        // tabBarLabelStyle: {
-        //   fontSize: rS(FONT_SIZES.h9),
-        //   fontFamily: FONT_FAMILY.r,
-        //   fontWeight: 300,
-        //   color: COLORS.black,
-        // },
         tabBarItemStyle: {
           paddingTop: rS(SPACING.h9),
         },

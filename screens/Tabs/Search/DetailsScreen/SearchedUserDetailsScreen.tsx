@@ -36,14 +36,15 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
   const [isFollowing, setIsFollowing] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [postsLoading, setPostsLoading] = useState(false);
+
+  // user details derived from the parameters through the routes
   const userDetails = route?.params;
   const username = route?.params.username;
   const fullName = route?.params.fullName;
-  const email = route?.params.email;
   const userid = route?.params.id;
   const profileLetter = fullName?.charAt(0);
 
+  //  // State variables for searched user followers, and following, results, the users search feed and refresh updates
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
 
@@ -52,10 +53,8 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
 
   const dispatch = useDispatch();
 
-  console.log(currentUserId, userid);
 
   const loadSearchedUserFeed = async () => {
-    setPostsLoading(true);
     try {
       const snapshot = await firestore()
         .collection('posts')
@@ -63,7 +62,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
         .orderBy('createdAt', 'desc')
         .get();
 
-      setPostsLoading(false);
       return snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -71,7 +69,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
     } catch (error) {
       console.error('Error fetching user feed posts:', error);
     } finally {
-      setPostsLoading(false);
       setRefreshing(false);
     }
   };
@@ -104,7 +101,6 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
       const checkIfFollowing = followersList.filter(
         user => user.id === currentUserId,
       );
-      console.log(checkIfFollowing.length, 'CIF');
       if (checkIfFollowing.length === 1) {
         setIsFollowing(true);
       } else {
@@ -119,10 +115,10 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
     }
   };
 
+  //function to load the posts of the searched user
   const loadPosts = async () => {
     const fetchedPosts = await loadSearchedUserFeed();
     setSearchedUserFeed(fetchedPosts);
-    console.log(fetchedPosts, 'FETCHED USER POSTS');
   };
   useEffect(() => {
     loadSearchedUser();
@@ -150,7 +146,7 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
           followedAt: firestore.FieldValue.serverTimestamp(),
           ...currentUser,
         });
-      loadSearchedUser();
+      loadSearchedUser(); // load the searched user
     } catch (error) {
       console.error('Error following user:', error);
     } finally {
@@ -180,6 +176,8 @@ const SearchedUserDetailsScreen: React.FC<BottomTabBarProps> = ({
       console.error('Error unfollowing user:', error);
     }
   };
+
+  //function for refresh updates
   const onRefresh = async () => {
     setRefreshing(true);
     await loadPosts();
