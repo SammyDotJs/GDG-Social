@@ -70,6 +70,7 @@ cd android
 ```bash
 ./gradlew assembleRelease
    ```
-2. then go to this directory to get the "app-release.apk" file: /android/app/build/outputs/apk/release/app-release.apk
-
-
+2. then go to this directory to get the "app-release.apk" file:
+   ```bash
+   /android/app/build/outputs/apk/release
+   ```
