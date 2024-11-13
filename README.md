@@ -58,6 +58,18 @@ npm run android
 # OR using Yarn
 yarn android
 ```
-
-
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_  shortly provided you have set up your emulator correctly.
+
+
+## Building into an APK File
+1. Go into the android directory
+```bash
+cd android
+```
+ and run the following
+```bash
+./gradlew assembleRelease
+   ```
+2. then go to this directory to get the "app-release.apk" file: /android/app/build/outputs/apk/release/app-release.apk
+
+
