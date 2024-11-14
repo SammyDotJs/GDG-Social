@@ -74,3 +74,6 @@ cd android
    ```bash
    cd ./app/build/outputs/apk/release
    ```
+
+# NOTE
+ When searching for users, use the username of the users, not the main name.
